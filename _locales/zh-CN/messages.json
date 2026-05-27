@@ -1,34 +1,34 @@
 {
   "extensionName": {
-    "message": "QuickTube",
+    "message": "YouTube 快速搜索",
     "description": "Name of the extension"
   },
   "extensionDescription": {
-    "message": "Search YouTube directly from the extension popup.",
+    "message": "直接从扩展弹出窗口搜索 YouTube。",
     "description": "Description of the extension"
   },
   "popupTitle": {
-    "message": "YouTube Search",
+    "message": "YouTube 搜索",
     "description": "Popup window title"
   },
   "searchPlaceholder": {
-    "message": "Search YouTube...",
+    "message": "搜索 YouTube...",
     "description": "Placeholder text for the search input"
   },
   "searchButton": {
-    "message": "Search",
+    "message": "搜索",
     "description": "Text for the search button"
   },
   "clearButton": {
-    "message": "Clear",
+    "message": "清除",
     "description": "Text for the clear button"
   },
   "searchHistory": {
-    "message": "Search History",
+    "message": "搜索历史",
     "description": "Heading for the search history section"
   },
   "searchQueryPrompt": {
-    "message": "Please enter a search query.",
+    "message": "请输入搜索内容。",
     "description": "Alert shown when search input is empty"
   }
-} 
+}

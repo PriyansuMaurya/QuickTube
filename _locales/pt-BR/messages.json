@@ -1,34 +1,34 @@
 {
   "extensionName": {
-    "message": "QuickTube",
+    "message": "Busca rápida no YouTube",
     "description": "Name of the extension"
   },
   "extensionDescription": {
-    "message": "Search YouTube directly from the extension popup.",
+    "message": "Pesquise no YouTube diretamente no popup da extensão.",
     "description": "Description of the extension"
   },
   "popupTitle": {
-    "message": "YouTube Search",
+    "message": "Busca no YouTube",
     "description": "Popup window title"
   },
   "searchPlaceholder": {
-    "message": "Search YouTube...",
+    "message": "Pesquisar no YouTube...",
     "description": "Placeholder text for the search input"
   },
   "searchButton": {
-    "message": "Search",
+    "message": "Pesquisar",
     "description": "Text for the search button"
   },
   "clearButton": {
-    "message": "Clear",
+    "message": "Limpar",
     "description": "Text for the clear button"
   },
   "searchHistory": {
-    "message": "Search History",
+    "message": "Histórico de busca",
     "description": "Heading for the search history section"
   },
   "searchQueryPrompt": {
-    "message": "Please enter a search query.",
+    "message": "Digite uma consulta de pesquisa.",
     "description": "Alert shown when search input is empty"
   }
-} 
+}

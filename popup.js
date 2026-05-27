@@ -4,6 +4,15 @@ const searchButton = document.getElementById("searchButton");
 const clearButton = document.getElementById("clearButton");
 const historyList = document.getElementById("historyList");
 const historySection = document.getElementById("history");
+const historyHeading = historySection.querySelector("h4");
+
+function applyLocalization() {
+  document.title = chrome.i18n.getMessage("popupTitle");
+  searchInput.placeholder = chrome.i18n.getMessage("searchPlaceholder");
+  searchButton.textContent = chrome.i18n.getMessage("searchButton");
+  clearButton.textContent = chrome.i18n.getMessage("clearButton");
+  historyHeading.textContent = chrome.i18n.getMessage("searchHistory");
+}
 
 // Load search history from localStorage
 function loadHistory() {
@@ -50,7 +59,7 @@ function performSearch(query) {
     loadHistory();
     searchInput.value = "";
   } else {
-    alert("Please enter a search query.");
+    alert(chrome.i18n.getMessage("searchQueryPrompt"));
   }
 }
 
@@ -69,6 +78,7 @@ clearButton.addEventListener("click", () => {
 
 // Auto-focus input field when popup opens
 document.addEventListener("DOMContentLoaded", () => {
+  applyLocalization();
   searchInput.focus();
   loadHistory();
 });

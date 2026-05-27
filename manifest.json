@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Quick Search",
+  "name": "__MSG_extensionName__",
   "version": "1.0",
-  "description": "Search YouTube directly from the extension popup.",
+  "description": "__MSG_extensionDescription__",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
