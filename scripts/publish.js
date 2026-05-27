@@ -11,16 +11,21 @@ if (!version) {
   throw new Error('GITHUB_REF_NAME must be a version tag like v1.0.0');
 }
 
-const productId = process.env.EDGE_PRODUCT_ID;
-const clientId = process.env.EDGE_CLIENT_ID;
-const clientSecret = process.env.EDGE_API_KEY;
+const productId = process.env.EDGE_PRODUCT_ID || process.env.EDGE_EXTENSION_ID || process.env.EDGE_PRODUCT;
+const clientId = process.env.EDGE_CLIENT_ID || process.env.EDGE_AAD_CLIENT_ID || process.env.EDGE_APP_ID;
+const clientSecret = process.env.EDGE_API_KEY || process.env.EDGE_CLIENT_SECRET || process.env.EDGE_SECRET;
 const authUrl = process.env.EDGE_AUTH_URL || 'https://login.microsoftonline.com/organizations/oauth2/v2.0/token';
 const apiBaseUrl = (process.env.EDGE_API_BASE_URL || 'https://api.partner.microsoft.com/partnermanagement/v1.0').replace(/\/$/, '');
 const buildDir = process.env.EDGE_BUILD_DIR || path.join(process.cwd(), 'dist', 'edge');
 const zipPath = process.env.EDGE_PACKAGE_PATH || path.join(process.cwd(), 'dist', `edge-extension-${version}.zip`);
 
-if (!productId || !clientId || !clientSecret) {
-  throw new Error('EDGE_PRODUCT_ID, EDGE_CLIENT_ID, and EDGE_API_KEY secrets must be set.');
+const missingSecrets = [];
+if (!productId) missingSecrets.push('EDGE_PRODUCT_ID (or EDGE_EXTENSION_ID/EDGE_PRODUCT)');
+if (!clientId) missingSecrets.push('EDGE_CLIENT_ID (or EDGE_AAD_CLIENT_ID/EDGE_APP_ID)');
+if (!clientSecret) missingSecrets.push('EDGE_API_KEY (or EDGE_CLIENT_SECRET/EDGE_SECRET)');
+
+if (missingSecrets.length > 0) {
+  throw new Error(`Missing required Edge publishing credentials: ${missingSecrets.join(', ')}.`);
 }
 
 if (!fs.existsSync(buildDir)) {

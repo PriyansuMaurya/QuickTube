@@ -33,6 +33,18 @@ jobs:
       - name: Build extension
         run: npm run build
 
+      - name: Validate Edge publish secrets
+        run: |
+          missing=()
+          [ -z "${EDGE_PRODUCT_ID:-}" ] && missing+=("EDGE_PRODUCT_ID")
+          [ -z "${EDGE_CLIENT_ID:-}" ] && missing+=("EDGE_CLIENT_ID")
+          [ -z "${EDGE_API_KEY:-}" ] && missing+=("EDGE_API_KEY")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "Missing required GitHub secrets: ${missing[*]}"
+            exit 1
+          fi
+          echo "Required Edge publish secrets are present."
+
       - name: Publish to Microsoft Edge Add-ons
         run: node scripts/publish.js
 
