@@ -1,0 +1,10 @@
+{
+  "name": "quicktube",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:chrome && npm run build:edge",
+    "build:chrome": "TARGET_BROWSER=chrome node build.js",
+    "build:edge": "TARGET_BROWSER=edge node build.js"
+  }
+}

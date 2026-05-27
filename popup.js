@@ -1,4 +1,8 @@
 // Remove unnecessary comments and clean up code
+const extensionAPI = (typeof chrome !== "undefined" && chrome) || (typeof browser !== "undefined" && browser);
+const targetBrowser = "__TARGET_BROWSER__";
+const storagePrefix = "__STORAGE_PREFIX__";
+const legacyStorageKey = "searchHistory";
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
 const clearButton = document.getElementById("clearButton");
@@ -6,17 +10,38 @@ const historyList = document.getElementById("historyList");
 const historySection = document.getElementById("history");
 const historyHeading = historySection.querySelector("h4");
 
+function getStorageKey(key) {
+  return `${storagePrefix}${key}`;
+}
+
+function getStoredHistory() {
+  const prefixedHistory = localStorage.getItem(getStorageKey(legacyStorageKey));
+  if (prefixedHistory) {
+    return JSON.parse(prefixedHistory);
+  }
+
+  const legacyHistory = localStorage.getItem(legacyStorageKey);
+  if (legacyHistory) {
+    const parsedHistory = JSON.parse(legacyHistory);
+    localStorage.setItem(getStorageKey(legacyStorageKey), legacyHistory);
+    localStorage.removeItem(legacyStorageKey);
+    return parsedHistory;
+  }
+
+  return [];
+}
+
 function applyLocalization() {
-  document.title = chrome.i18n.getMessage("popupTitle");
-  searchInput.placeholder = chrome.i18n.getMessage("searchPlaceholder");
-  searchButton.textContent = chrome.i18n.getMessage("searchButton");
-  clearButton.textContent = chrome.i18n.getMessage("clearButton");
-  historyHeading.textContent = chrome.i18n.getMessage("searchHistory");
+  document.title = extensionAPI.i18n.getMessage("popupTitle");
+  searchInput.placeholder = extensionAPI.i18n.getMessage("searchPlaceholder");
+  searchButton.textContent = extensionAPI.i18n.getMessage("searchButton");
+  clearButton.textContent = extensionAPI.i18n.getMessage("clearButton");
+  historyHeading.textContent = extensionAPI.i18n.getMessage("searchHistory");
 }
 
 // Load search history from localStorage
 function loadHistory() {
-  const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+  const history = getStoredHistory();
   historyList.innerHTML = "";
 
   if (history.length > 0) {
@@ -42,11 +67,11 @@ function loadHistory() {
 
 // Save query to localStorage
 function saveToHistory(query) {
-  let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+  let history = getStoredHistory();
   if (!history.includes(query)) {
     history.push(query);
     if (history.length > 3) history.shift();
-    localStorage.setItem("searchHistory", JSON.stringify(history));
+    localStorage.setItem(getStorageKey(legacyStorageKey), JSON.stringify(history));
   }
 }
 
@@ -54,12 +79,12 @@ function saveToHistory(query) {
 function performSearch(query) {
   if (query) {
     const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-    chrome.tabs.create({ url });
+    extensionAPI.tabs.create({ url });
     saveToHistory(query);
     loadHistory();
     searchInput.value = "";
   } else {
-    alert(chrome.i18n.getMessage("searchQueryPrompt"));
+    alert(extensionAPI.i18n.getMessage("searchQueryPrompt"));
   }
 }
 
