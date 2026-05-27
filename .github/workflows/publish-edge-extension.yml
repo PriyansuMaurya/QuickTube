@@ -1,0 +1,42 @@
+name: Publish Edge Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish-edge:
+    runs-on: ubuntu-latest
+    env:
+      EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+      EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+      EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+      EDGE_API_BASE_URL: ${{ vars.EDGE_API_BASE_URL || 'https://api.partner.microsoft.com/partnermanagement/v1.0' }}
+      EDGE_BUILD_DIR: dist/edge
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Publish to Microsoft Edge Add-ons
+        run: node scripts/publish.js
+
+      - name: Report published version
+        if: success()
+        run: |
+          echo "Published version: ${GITHUB_REF_NAME}"
